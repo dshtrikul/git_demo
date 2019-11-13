@@ -16,6 +16,7 @@ class BaseHandler:
         :return: items other than none
         """
         for item in data:
+            # skips empty items
             if item is not None:
                 return item
 
@@ -35,8 +36,10 @@ class Printer(BaseHandler):
         :type data: String
         :return: None
         """
+        # prints header
         print('========  GIT DEMO ========')
         print(f"{datetime.datetime.now():%A, %d. %B %Y %H:%M}", '\n')
+
         print(self.handle(data))
 
 
@@ -46,7 +49,7 @@ class Logger(BaseHandler):
     Extends 'BaseHandler' class
     """
 
-    def log_to_file(self, data):
+    def save(self, data):
         """
         Generates filename for sorting purposes and saves logfile to a dedicated directory
 
@@ -65,4 +68,4 @@ class Logger(BaseHandler):
 if __name__ == '__main__':
     p = Printer()
     pp = Logger()
-    pp.log_to_file("hello")
+    pp.save("hello")

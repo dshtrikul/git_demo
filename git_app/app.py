@@ -1,4 +1,4 @@
-from git_app.parse import Parser
+from parser import Parser
 p = Parser()
 
 
@@ -6,8 +6,7 @@ class App:
     """
     Aggregates the functions used to process retrieved command line arguments
     """
-
-    def __init__(self, arg_dict):
+    def construct_arg_dict(self, arg_dict):
         """
         Assigns received set of parameters to the instance to operate at instance level
 

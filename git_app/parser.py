@@ -7,9 +7,6 @@ class Parser:
     Aggregates argument parsing functions
     """
     def __init__(self):
-        """
-        Constructs command line arguments options
-        """
 
         self.parser = argparse.ArgumentParser()
         self.parser.add_argument('-add', nargs="?", default=False, metavar='Filename', help='Add a file to staging area')
@@ -19,14 +16,18 @@ class Parser:
         self.parser.add_argument('-m', action='store_true', help='message flag. Usage: -commit -m')
         self.parser.add_argument('-v', action='store_true', help='verbose flag. Usage: -status -v')
 
-    def get_arg_dict(self):
+    def get_arg_dict(self, foo=None):
         """
         Aggregate parsed arguments for further processing
-        :type: dict
+        :param foo: some item
+        :type foo: dict
+
+        :rtype: dict
         :return: dict of argument - value pairs
         """
 
         arg_set = self.parser.parse_args()
+        # import pdb; pdb.set_trace()
         return {
             'add': arg_set.add,
             'commit': arg_set.commit,
@@ -39,7 +40,10 @@ class Parser:
     def terminate(self):
         """
         Provide ability to terminate processing
-        :return: None
+
+        :raises: RuntimeError
+        :returns: RuntimeError
+
         """
         print('Error: not enough arguments')
         self.parser.print_help()
