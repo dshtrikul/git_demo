@@ -1,69 +1,93 @@
-# self.parser = argparse.ArgumentParser()
-# self.parser.add_argument('-add', nargs="?", default=False, metavar='Filename', help='Add a file to staging area')
-# self.parser.add_argument('-commit', nargs="?", default=False, metavar='Filename', help='Commit changes')
-# self.parser.add_argument('-status', action='store_const', const=True, default=False, help='Output current repo status')
-# self.parser.add_argument('-a', action='store_true', help='all flag for. Usage: -add -a')
-# self.parser.add_argument('-m', action='store_true', help='message flag. Usage: -commit -m')
-# self.parser.add_argument('-v', action='store_true', help='verbose flag. Usage: -status -v')
-
-import click
-
+import click, sys, subprocess
 
 @click.group()
 def main():
+    """Click is a cool CLI utility"""
     pass
 
 
 @click.command()
-@click.argument('string', nargs=-1)
+@click.argument('filename', nargs=-1)
 @click.option('-a', '-all', 'all', is_flag=True)
 @click.option('-caps/-nocaps', default=False)
-def add(string, all, caps):
+@click.pass_context
+def add(ctx, filename, all, caps):
+    """Mimic the git add command"""
     if all:
         print('do add -aa')
-    elif string is not None and len(string) > 0
+    elif filename is not None and len(filename) > 0:
         if caps:
             print('caps!!!')
-            string = string[0].upper()
-        print(f'do add {string[0]}')
+            filename = filename[0].upper()
+        print(f'do add {filename[0]}')
     else:
-        print('exit')
+        print(add.get_help(ctx))
 
 
+@click.command()
+@click.argument('commit_message', nargs=-1)
+@click.option('-m', '-message', 'message', required=True)
+@click.option('--show-hash', 'show_hash', flag_value=True)
+@click.pass_context
+def commit(ctx, commit_message, message, show_hash):
+    "Mimic the git commit command"
+    if message:
+        print(f'do commit {message}')
+        if show_hash:
+            print('HASH '+str(hash(message)))
 
+    else:
+        print(commit.get_help(ctx))
+
+
+@click.command()
+@click.argument('some_words', required=True)
+@click.option('-v', '--verbose', 'verbose', count=True, help="Choose from ['-v', '-vv', '-vvv']", required=True)
+@click.pass_context
+def talk(ctx, some_words, verbose):
+    """Print words some number of times"""
+    if verbose == 0:
+        print(talk.get_help(ctx))
+        sys.exit()
+    if some_words:
+        click.confirm('Proceed?', abort=True)
+        print(f'versosity level is {verbose}')
+        print((some_words+' ')*verbose)
+
+
+@click.command()
+@click.option('-f', '--file', 'open_file', required=True, type=click.File('r'))
+@click.option('-exec/-noexec', 'exec', default=False)
+@click.option('-s', '--save', 'save_to_file', type=click.File('a'))
+def execute(open_file, save_to_file, exec):
+    """Execute script in shell, write output to file"""
+    if open_file:
+        commands = open_file.read()
+        print(commands)
+        if exec:
+            for line in commands.split('\n'):
+                output = subprocess.check_output(line, shell=True).decode('cp1251')
+                print(output)
+                if save_to_file:
+                    save_to_file.write(output)
+
+
+@click.command()
+@click.option('-s', '--seconds', 'seconds', required=True, type=click.Choice([repr(x) for x in range(100, 110)]))
+def count(seconds):
+    """Show a progress bar feature"""
+    import time, random
+    with click.progressbar(range(int(seconds)), label='PROGRESS') as bar:
+        for item in bar:
+            time.sleep(random.randint(5, 400)*0.0005)
 
 
 main.add_command(add)
-
+main.add_command(commit)
+main.add_command(talk)
+main.add_command(execute)
+main.add_command(count)
 
 
 if __name__ == "__main__":
     main()
-#
-# @click.argument('command', type=click.Choice(['output', 'add', 'commit', 'status']))
-# @click.option('-string') #, prompt='Message') # , nargs=-1
-# @click.option('-r', '--repeat', 'repeat', type=click.Choice([repr(x) for x in [1, 2, 3]]))
-# @click.option('-caps/-nocaps', default=False)
-# @click.option('-a', '-all', 'all', is_flag=True)
-# @click.option('-m', '--message')
-# @click.option('-v', '--verbose', is_flag=True)
-# def run(command, string, repeat, caps, all, message, verbose):
-#     if command == 'output':
-#         if caps:
-#             print('caps!!!')
-#             string = string.upper()
-#
-#         if repeat:
-#             print((string+'\n')*eval(repeat))
-#         else:
-#             print(string)
-#
-#     if command == 'add':
-#         print(type(all))
-#         if all:
-#             print('do add -aa')
-#         if string is not None:
-#             print(f'do add {string}')
-#         else:
-#             print('exit')
-#
