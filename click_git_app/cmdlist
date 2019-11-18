@@ -1,2 +1,3 @@
-path
+ps
+hostnamectl
 echo This is the end line

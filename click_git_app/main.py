@@ -58,7 +58,7 @@ def talk(ctx, some_words, verbose):
 @click.command()
 @click.option('-f', '--file', 'open_file', required=True, type=click.File('r'))
 @click.option('-exec/-noexec', 'exec', default=False)
-@click.option('-s', '--save', 'save_to_file', type=click.File('a'))
+@click.option('-s', '--save', 'save_to_file', type=click.File('w'))
 def execute(open_file, save_to_file, exec):
     """Execute script in shell, write output to file"""
     if open_file:
@@ -67,6 +67,7 @@ def execute(open_file, save_to_file, exec):
         if exec:
             for line in commands.split('\n'):
                 output = subprocess.check_output(line, shell=True).decode('cp1251')
+                output = '\n' + output + "-"*50
                 print(output)
                 if save_to_file:
                     save_to_file.write(output)
@@ -80,6 +81,23 @@ def count(seconds):
     with click.progressbar(range(int(seconds)), label='PROGRESS') as bar:
         for item in bar:
             time.sleep(random.randint(5, 400)*0.0005)
+
+
+import time
+
+
+@main.command()
+@click.option('-s', '--seconds', 'seconds', required=True)
+def sleep(seconds):
+    counter = 0
+    while True:
+        if counter == seconds:
+            sys.stderr.write('\n')
+            return
+
+        sys.stderr.write('.')
+        time.sleep(1)
+        counter += 1
 
 
 main.add_command(add)

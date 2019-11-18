@@ -1,0 +1,18 @@
+
+  PID TTY          TIME CMD
+30347 pts/0    00:00:00 bash
+31182 pts/0    00:00:00 python
+31183 pts/0    00:00:00 sh
+31184 pts/0    00:00:00 ps
+--------------------------------------------------
+   Static hostname: dmytro-ds
+         Icon name: computer-laptop
+           Chassis: laptop
+        Machine ID: a68ac6bc518b41d7b740bd34ab8bb0c9
+           Boot ID: 3e644c25b50249169f287005104c8175
+  Operating System: Ubuntu 18.04.3 LTS
+            Kernel: Linux 5.0.0-32-generic
+      Architecture: x86-64
+--------------------------------------------------
+This is the end line
+--------------------------------------------------
