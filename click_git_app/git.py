@@ -1,5 +1,5 @@
 import click
-import subprocess as sp
+import subprocess as subprocess
 import datetime
 from pathlib import Path
 lsep = "-" * 50
@@ -33,15 +33,16 @@ def git():
 @git.command(help='Pipe any command to git')
 @click.argument('command')
 @click.option('-log', 'log', is_flag=True)
+
 def cmd(command, log):
     # print(command)
     # os.system('git status')                                  # Just execute code
     # subprocess.call(command, shell=True)
     command = 'git '+command
-    p = sp.Popen(command, stdout=sp.PIPE, shell=True)
-    # output = p.communicate()[0].decode()                     # via communicate()
-    # rcode = p.returncode
-    output = p.stdout.read().decode()                          # via stdout.read()
+    proccess = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+    # output = proccess.communicate()[0].decode()                     # via communicate()
+    # rcode = proccess.returncode
+    output = proccess.stdout.read().decode()                          # via stdout.read()
 
     if not log:
         print(output, f'\nexit code:{p.wait()}')

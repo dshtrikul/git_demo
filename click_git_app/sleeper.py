@@ -30,6 +30,7 @@ def receive_signal(signum, frame):
         # os.system(f'kill -20 {signum}')
         i = input('Y/y to kill the process: ')
         if i in ['Y', 'y', 'yes']:
+            print('closing gracefully...')
             sys.exit()
         else:
             print('Continuing...')
@@ -44,8 +45,14 @@ def show_init():
 def sleep(seconds):
     counter = 0
     while seconds > counter:
-        print('.', end='')
-        sys.stdout.flush()
+        # sys.stderr.write('.')
+
+        # print('.', end='')     # need to flush to see '.' each loop
+        # sys.stdout.flush()
+
+        # print('*')               # dont need to flush
+        sys.stderr.write('*')
+        # sys.stdout.write('\n')
         time.sleep(1)
         counter += 1
 
